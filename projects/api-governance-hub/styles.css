@@ -1,0 +1,311 @@
+:root {
+    --bg-main: #0a0a0a;
+    --bg-panel: #111111;
+    --border-color: #262626;
+    
+    --text-primary: #e5e5e5;
+    --text-secondary: #a3a3a3;
+    
+    --accent: #22c55e; /* Terminal Green */
+    --accent-hover: #16a34a;
+    --accent-muted: rgba(34, 197, 94, 0.1);
+    
+    --method-get: #3b82f6;
+    --method-post: #22c55e;
+    --method-delete: #ef4444;
+
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    background-image: 
+        linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Header */
+.header {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-main);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.back-link:hover { color: var(--accent); }
+
+.logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+}
+
+.logo span { color: var(--accent); }
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.hero {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.hero h1 {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero p {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+}
+
+/* API Catalog Sidebar */
+.catalog {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.catalog-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+}
+
+.api-list {
+    list-style: none;
+    padding: 0.5rem;
+}
+
+.api-item {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 0.25rem;
+}
+
+.api-item:hover, .api-item.active {
+    background: var(--border-color);
+}
+
+.api-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+}
+
+.api-status {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    box-shadow: 0 0 5px var(--accent);
+}
+
+.api-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* API Explorer Main Area */
+.explorer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.panel-title {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+/* Request Builder */
+.request-builder {
+    padding: 1.5rem;
+}
+
+.url-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.method-select {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--method-get);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    outline: none;
+}
+
+.url-input {
+    flex: 1;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    outline: none;
+}
+
+.url-input:focus { border-color: var(--accent); }
+
+.btn-send {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    padding: 0 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-send:hover { background: var(--accent-hover); }
+
+/* Response Viewer */
+.response-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
+.status-code {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.response-meta {
+    color: var(--text-secondary);
+    display: flex;
+    gap: 1rem;
+}
+
+.json-viewer {
+    padding: 1.5rem;
+    background: var(--bg-main);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    overflow-x: auto;
+    color: #e5e5e5;
+    position: relative;
+    min-height: 200px;
+}
+
+.json-key { color: #8b5cf6; }
+.json-string { color: #22c55e; }
+.json-number { color: #f59e0b; }
+.json-boolean { color: #3b82f6; }
+
+.copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+.copy-btn:hover { color: var(--text-primary); }
+
+/* Standards / Details */
+.standards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.standard-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.standard-card h4 {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.standard-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+    .grid-layout { grid-template-columns: 1fr; }
+    .standards-grid { grid-template-columns: 1fr; }
+    .url-bar { flex-direction: column; }
+    .btn-send { padding: 0.75rem; }
+}

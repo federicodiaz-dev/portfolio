@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiting Metrics Lab - Case Study</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            Recruiting<span>Lab</span>
+        </div>
+        <a href="../../index.html" class="back-link">
+            ← Volver al Portfolio
+        </a>
+    </header>
+
+    <main class="container">
+        
+        <section class="hero">
+            <h1>Laboratorio Analítico de Recruiting</h1>
+            <p>Plataforma híbrida HR Tech para evaluar el rendimiento técnico de candidatos. Combina métricas de evaluación automatizada con análisis de skills detallado.</p>
+        </section>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Candidatos Evaluados (Q3)</div>
+                <div class="kpi-value">142</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Tasa de Aprobación</div>
+                <div class="kpi-value">34.5%</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Tiempo Promedio Resolución</div>
+                <div class="kpi-value">48m</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Skill con mayor déficit</div>
+                <div class="kpi-value" style="font-size: 1.5rem; color: var(--status-fail);">System Design</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            
+            <!-- Left Side: Table & Test -->
+            <div>
+                <!-- Candidate Table -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header">
+                        <div class="card-title">Directorio de Candidatos (Simulado)</div>
+                        <div class="table-filters">
+                            <button class="filter-btn active" data-role="all">Todos</button>
+                            <button class="filter-btn" data-role="front">Frontend</button>
+                            <button class="filter-btn" data-role="back">Backend</button>
+                            <button class="filter-btn" data-role="data">Data</button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th>Rol</th>
+                                    <th>Puntaje Global</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="cand-row" id="cand-1" data-role="front">
+                                    <td style="font-weight: 500;">Laura M.</td>
+                                    <td><span class="role-badge role-front">Frontend</span></td>
+                                    <td>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                                            <span>92/100</span>
+                                        </div>
+                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 92%;"></div></div>
+                                    </td>
+                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
+                                </tr>
+                                <tr class="cand-row" id="cand-2" data-role="back">
+                                    <td style="font-weight: 500;">Carlos T.</td>
+                                    <td><span class="role-badge role-back">Backend</span></td>
+                                    <td>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                                            <span>88/100</span>
+                                        </div>
+                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 88%;"></div></div>
+                                    </td>
+                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
+                                </tr>
+                                <tr class="cand-row" id="cand-3" data-role="data">
+                                    <td style="font-weight: 500;">Sofia R.</td>
+                                    <td><span class="role-badge role-data">Data Analyst</span></td>
+                                    <td>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                                            <span>95/100</span>
+                                        </div>
+                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 95%;"></div></div>
+                                    </td>
+                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
+                                </tr>
+                                <tr class="cand-row" data-role="front">
+                                    <td style="font-weight: 500;">Diego L.</td>
+                                    <td><span class="role-badge role-front">Frontend</span></td>
+                                    <td>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
+                                            <span>45/100</span>
+                                        </div>
+                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 45%; background: var(--status-fail);"></div></div>
+                                    </td>
+                                    <td style="color: var(--status-fail); font-weight: 500;">Rechazado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Test Engine Mock -->
+                <div class="card test-engine">
+                    <div class="card-header">
+                        <div class="card-title">Simulador de Motor de Pruebas</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div class="test-question">
+                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 0.5rem;">Pregunta 4/10 • Algoritmos</div>
+                            <div class="question-text">
+                                ¿Cuál es la complejidad temporal promedio para buscar un elemento en un Hash Table (Diccionario)?
+                            </div>
+                            <div class="options">
+                                <button class="option-btn" data-correct="false">A. O(n)</button>
+                                <button class="option-btn" data-correct="false">B. O(log n)</button>
+                                <button class="option-btn" data-correct="true">C. O(1)</button>
+                                <button class="option-btn" data-correct="false">D. O(n log n)</button>
+                            </div>
+                            <div class="test-feedback" id="test-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Details Panel -->
+            <div class="card" style="height: fit-content; position: sticky; top: 2rem;">
+                <div class="card-header">
+                    <div class="card-title">Perfil del Candidato</div>
+                </div>
+                
+                <div id="details-empty" class="details-empty">
+                    Selecciona un candidato de la tabla para ver su análisis detallado.
+                </div>
+
+                <div id="candidate-details" class="candidate-details">
+                    <div class="cand-header">
+                        <div class="cand-avatar" id="d-avatar">LM</div>
+                        <div>
+                            <div class="cand-name" id="d-name">Laura M.</div>
+                            <div class="cand-role" id="d-role">Frontend Engineer</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                        <div>
+                            <h4 style="font-size: 0.75rem; margin-bottom: 0;">Score Técnico</h4>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="d-score">92/100</div>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 0.75rem; margin-bottom: 0;">Tiempo Uso</h4>
+                            <div style="font-size: 1.5rem; font-weight: 700;" id="d-time">45 min</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Áreas Fuertes</h4>
+                        <div class="skill-tags" id="d-strong">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Oportunidades de Mejora</h4>
+                        <div class="skill-tags" id="d-weak">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                        <button style="width: 100%; background: var(--text-primary); color: white; border: none; padding: 0.75rem; border-radius: 6px; font-weight: 500; cursor: pointer;">Descargar Reporte PDF</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

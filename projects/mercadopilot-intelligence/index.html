@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MercadoPilot Intelligence - Case Study</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="nav-container">
+            <a href="../../index.html" class="back-link">
+                <span>←</span> Volver al Portfolio
+            </a>
+            <div class="logo">
+                Mercado<span>Pilot</span> Intelligence
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <section class="hero">
+            <span class="hero-badge">SaaS / Analytics Sandbox</span>
+            <h1>Optimización impulsada<br>por inteligencia</h1>
+            <p>Plataforma conceptual de auditoría para vendedores de Mercado Libre. Convierte métricas complejas en acciones directas para aumentar conversión, visibilidad y ventas.</p>
+        </section>
+
+        <!-- DASHBOARD MOCKUP -->
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div class="dashboard-title">Panel General (Últimos 30 días)</div>
+                <div class="dashboard-actions">
+                    <button>Sincronizar API</button>
+                    <button style="background: var(--accent-primary); color: white; border: none;">Descargar Reporte</button>
+                </div>
+            </div>
+
+            <div class="dashboard-body">
+                <!-- Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span>Impresiones Orgánicas</span>
+                            <span>👁️</span>
+                        </div>
+                        <div class="metric-value" id="metric-impressions">0</div>
+                        <div class="metric-trend trend-up">↑ 12.4% vs mes anterior</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span>Tasa de Conversión</span>
+                            <span>⚡</span>
+                        </div>
+                        <div class="metric-value" id="metric-conversion">0%</div>
+                        <div class="metric-trend trend-up">↑ 0.8% vs mes anterior</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span>Ingresos Brutos</span>
+                            <span>💰</span>
+                        </div>
+                        <div class="metric-value" id="metric-sales">$0</div>
+                        <div class="metric-trend trend-down">↓ 2.1% vs mes anterior</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span>Score de Cuenta</span>
+                            <span>⭐</span>
+                        </div>
+                        <div class="metric-value" style="color: var(--status-warning);">84/100</div>
+                        <div class="metric-trend">2 publicaciones críticas</div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="dashboard-grid">
+                    
+                    <!-- Left Column: Table & SEO -->
+                    <div class="grid-left">
+                        
+                        <div class="section-card" style="margin-bottom: 1.5rem;">
+                            <h3>Auditoría de Publicaciones</h3>
+                            
+                            <div class="filters">
+                                <button class="filter-btn active" data-filter="all">Todas (142)</button>
+                                <button class="filter-btn" data-filter="critica">Críticas (2)</button>
+                                <button class="filter-btn" data-filter="mejorable">Mejorables (18)</button>
+                                <button class="filter-btn" data-filter="optima">Óptimas (122)</button>
+                            </div>
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID Publicación</th>
+                                            <th>Título</th>
+                                            <th>Estado</th>
+                                            <th>Visitas</th>
+                                            <th>CTR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="pub-row" data-status="critica">
+                                            <td style="font-family: var(--font-mono); color: var(--text-secondary);">MLA12938471</td>
+                                            <td>Auriculares Inalámbricos Bluetooth</td>
+                                            <td><span class="badge badge-critica">Crítica</span></td>
+                                            <td>1,204</td>
+                                            <td style="color: var(--status-error);">0.8%</td>
+                                        </tr>
+                                        <tr class="pub-row" data-status="mejorable">
+                                            <td style="font-family: var(--font-mono); color: var(--text-secondary);">MLA99827341</td>
+                                            <td>Reloj Inteligente Smartwatch Deportivo</td>
+                                            <td><span class="badge badge-mejorable">Mejorable</span></td>
+                                            <td>3,412</td>
+                                            <td style="color: var(--status-warning);">1.5%</td>
+                                        </tr>
+                                        <tr class="pub-row" data-status="optima">
+                                            <td style="font-family: var(--font-mono); color: var(--text-secondary);">MLA55412399</td>
+                                            <td>Teclado Mecánico RGB Switch Red Español Original</td>
+                                            <td><span class="badge badge-optima">Óptima</span></td>
+                                            <td>8,921</td>
+                                            <td style="color: var(--status-success);">4.2%</td>
+                                        </tr>
+                                        <tr class="pub-row" data-status="mejorable">
+                                            <td style="font-family: var(--font-mono); color: var(--text-secondary);">MLA22394812</td>
+                                            <td>Mouse Gamer Usb</td>
+                                            <td><span class="badge badge-mejorable">Mejorable</span></td>
+                                            <td>940</td>
+                                            <td style="color: var(--status-warning);">1.1%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="section-card">
+                            <h3>Simulador SEO de Títulos</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                                Ingresa el título de un producto para evaluar su potencial de búsqueda en el algoritmo de Mercado Libre.
+                            </p>
+                            <div class="seo-input-group">
+                                <input type="text" id="input-title" placeholder="Ej: Zapatillas Running Hombre Deportivas Originales">
+                                <button id="btn-analyze">Analizar Título</button>
+                            </div>
+                            
+                            <div class="seo-results" id="seo-results">
+                                <div style="display: flex; gap: 2rem; align-items: center;">
+                                    <div style="text-align: center;">
+                                        <div class="score-circle" id="score-circle">0</div>
+                                        <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Score SEO</span>
+                                    </div>
+                                    <ul class="seo-tips" id="seo-tips">
+                                        <!-- Populated via JS -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Actions -->
+                    <div class="grid-right">
+                        <div class="section-card" style="height: 100%;">
+                            <h3>Acciones Recomendadas</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                                Prioridad calculada en base al impacto estimado en ventas.
+                            </p>
+
+                            <div class="action-list">
+                                <div class="action-item" style="border-color: rgba(239, 68, 68, 0.3);">
+                                    <div class="action-icon" style="color: var(--status-error);">⚠️</div>
+                                    <div class="action-content">
+                                        <h4>Mejorar CTR de MLA12938471</h4>
+                                        <p>El título es muy genérico y la imagen principal tiene fondo gris. Potencial de +$45k en ventas.</p>
+                                    </div>
+                                </div>
+                                <div class="action-item" style="border-color: rgba(234, 179, 8, 0.3);">
+                                    <div class="action-icon" style="color: var(--status-warning);">🏷️</div>
+                                    <div class="action-content">
+                                        <h4>Actualizar Precios</h4>
+                                        <p>3 productos quedaron 10% por encima del top seller de la categoría.</p>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-icon" style="color: var(--accent-secondary);">💬</div>
+                                    <div class="action-content">
+                                        <h4>Preguntas Frecuentes</h4>
+                                        <p>Se detectaron 14 preguntas sobre "garantía". Sugerencia: agregarlo a la descripción.</p>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-icon" style="color: var(--status-success);">📦</div>
+                                    <div class="action-content">
+                                        <h4>Envío Full recomendado</h4>
+                                        <p>El SKU "Reloj Smartwatch" califica para envíos Full. Mejoraría posicionamiento un 30%.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END DASHBOARD -->
+
+        <div class="architecture">
+            <h2>Arquitectura del Sistema (Simulada)</h2>
+            <div class="arch-grid">
+                <div class="arch-node">
+                    <div class="arch-icon">🌐</div>
+                    <h4>Frontend App</h4>
+                    <p>React + TailwindCSS para la interfaz, Zustand para state management.</p>
+                </div>
+                <div class="arch-node">
+                    <div class="arch-icon">⚡</div>
+                    <h4>API Gateway</h4>
+                    <p>Node.js/Express encolando requests y manejando rate limiting.</p>
+                </div>
+                <div class="arch-node">
+                    <div class="arch-icon">🧠</div>
+                    <h4>Scoring Engine</h4>
+                    <p>Python/FastAPI corriendo heurísticas y algoritmos de análisis SEO.</p>
+                </div>
+                <div class="arch-node">
+                    <div class="arch-icon">🗄️</div>
+                    <h4>Data Storage</h4>
+                    <p>PostgreSQL para usuarios, Redis para caché de métricas de ML.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>Case Study — Desarrollado por Federico Diaz</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

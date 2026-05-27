@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Governance Hub - Case Study</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            Nexus<span>API</span> Hub
+        </div>
+        <a href="../../index.html" class="back-link">
+            ../return_to_portfolio
+        </a>
+    </header>
+
+    <main class="container">
+        
+        <section class="hero">
+            <h1>API Governance Hub</h1>
+            <p>Plataforma centralizada para explorar, probar y monitorear microservicios. Simulación de un entorno real con JSON parsing, control de métodos y métricas de endpoints.</p>
+        </section>
+
+        <div class="grid-layout">
+            
+            <!-- Sidebar Catalog -->
+            <aside class="catalog">
+                <div class="catalog-header">
+                    // API_CATALOG
+                </div>
+                
+                <ul class="api-list">
+                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">AUTH SERVICE</li>
+                    
+                    <li class="api-item" data-id="auth-login">
+                        <div class="api-name">
+                            <span>POST /login</span>
+                            <span class="api-status"></span>
+                        </div>
+                        <div class="api-meta">
+                            <span>v1.2</span>
+                            <span>JWT</span>
+                        </div>
+                    </li>
+                    
+                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">PROJECTS SERVICE</li>
+                    
+                    <li class="api-item" data-id="projects-list">
+                        <div class="api-name">
+                            <span>GET /projects</span>
+                            <span class="api-status"></span>
+                        </div>
+                        <div class="api-meta">
+                            <span>v2.0</span>
+                            <span>Cache: ON</span>
+                        </div>
+                    </li>
+
+                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">USERS SERVICE</li>
+                    
+                    <li class="api-item" data-id="users-delete">
+                        <div class="api-name">
+                            <span>DELETE /users/{id}</span>
+                            <span class="api-status" style="background: var(--status-warning);"></span>
+                        </div>
+                        <div class="api-meta">
+                            <span>v1.0</span>
+                            <span>Admin Only</span>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Explorer -->
+            <section class="explorer">
+                
+                <!-- Request Panel -->
+                <div class="panel">
+                    <div class="panel-title">Request Builder</div>
+                    <div class="request-builder">
+                        <div class="url-bar">
+                            <select class="method-select" id="method-select">
+                                <option value="GET" style="color: var(--method-get)">GET</option>
+                                <option value="POST" style="color: var(--method-post)">POST</option>
+                                <option value="DELETE" style="color: var(--method-delete)">DELETE</option>
+                            </select>
+                            <input type="text" class="url-input" id="url-input" readonly>
+                            <button class="btn-send" id="btn-send">Send Request</button>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
+                            Headers: <br>
+                            <span style="color: #a3a3a3;">Authorization:</span> <span style="color: #22c55e;">Bearer eyJhbGci...</span><br>
+                            <span style="color: #a3a3a3;">Content-Type:</span> <span style="color: #22c55e;">application/json</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Panel -->
+                <div class="panel">
+                    <div class="response-header">
+                        <span>Response Body</span>
+                        <div class="response-meta">
+                            <span class="status-code" id="res-status">---</span>
+                            <span id="res-time">0ms</span>
+                        </div>
+                    </div>
+                    <div class="json-viewer">
+                        <button class="copy-btn" id="copy-btn">Copy JSON</button>
+                        <pre><code id="json-output">// Click "Send Request" to fetch data...</code></pre>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- Standards Grid -->
+        <div class="standards-grid">
+            <div class="standard-card">
+                <h4>[01] Autenticación</h4>
+                <p>Implementación de JWT con rotación de refresh tokens y validación de claims RBAC por API Gateway.</p>
+            </div>
+            <div class="standard-card">
+                <h4>[02] Rate Limiting</h4>
+                <p>Algoritmo Token Bucket en Redis. Límite estándar: 100 req/min. Superar límite retorna HTTP 429.</p>
+            </div>
+            <div class="standard-card">
+                <h4>[03] Telemetría</h4>
+                <p>Trazo distribuido con OpenTelemetry. Logs centralizados con ELK stack. Monitoreo en Datadog.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

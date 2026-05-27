@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Data Observatory - Case Study</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            Clinical Data Observatory
+        </div>
+        <a href="../../index.html" class="back-link">
+            <span>←</span> Volver al Portfolio
+        </a>
+    </header>
+
+    <main class="container">
+        
+        <section class="hero">
+            <h1>Monitoreo de Pipelines Clínicos</h1>
+            <p>Observatorio enterprise simulado para la gestión de calidad, linaje y estado de sincronización de datos médicos a través de arquitecturas Medallion (RAW a UNIFIED).</p>
+        </section>
+
+        <!-- Status Panel -->
+        <div class="status-panel">
+            <div class="status-card healthy">
+                <div class="status-label">Pipelines Activos</div>
+                <div class="status-value" id="pipelines-active">24</div>
+            </div>
+            <div class="status-card">
+                <div class="status-label">Última Actualización</div>
+                <div class="status-value" id="last-update" style="font-size: 1.2rem; margin-top: 0.5rem;">Hoy, 09:42</div>
+            </div>
+            <div class="status-card warning">
+                <div class="status-label">Datasets con Alertas</div>
+                <div class="status-value" style="color: var(--status-warning);">3</div>
+            </div>
+            <div class="status-card healthy">
+                <div class="status-label">Calidad Promedio (DQ)</div>
+                <div class="status-value">99.4%</div>
+            </div>
+        </div>
+
+        <!-- Data Layers (Medallion Architecture) -->
+        <div class="layers-container">
+            <h2>
+                Arquitectura de Datos (Lineage)
+                <button class="btn btn-primary" id="btn-refresh">⟳ Sincronizar Estado</button>
+            </h2>
+            
+            <div class="layers-grid">
+                
+                <!-- RAW -->
+                <div class="layer-col">
+                    <div class="layer-header">
+                        <h3>RAW LAYER</h3>
+                    </div>
+                    
+                    <div class="dataset-card">
+                        <div class="dataset-name">hl7_admissions_raw</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Ingested</span>
+                            <span>ADLS Gen2</span>
+                        </div>
+                    </div>
+                    <div class="dataset-card">
+                        <div class="dataset-name">lab_results_json</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Ingested</span>
+                            <span>Blob Storage</span>
+                        </div>
+                    </div>
+                    <div class="dataset-card" style="border-color: var(--status-warning);">
+                        <div class="dataset-name">ehr_patient_dumps</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-yellow"></i> Delayed (2h)</span>
+                            <span>SFTP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOUNDATION -->
+                <div class="layer-col">
+                    <div class="layer-header">
+                        <h3>FOUNDATION (Bronze)</h3>
+                    </div>
+                    
+                    <div class="dataset-card">
+                        <div class="dataset-name">bronze.admissions</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Parsed</span>
+                            <span>Delta Table</span>
+                        </div>
+                    </div>
+                    <div class="dataset-card">
+                        <div class="dataset-name">bronze.lab_metrics</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Parsed</span>
+                            <span>Delta Table</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRUSTED -->
+                <div class="layer-col">
+                    <div class="layer-header">
+                        <h3>TRUSTED (Silver)</h3>
+                    </div>
+                    
+                    <div class="dataset-card">
+                        <div class="dataset-name">silver.dim_patient</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Cleansed</span>
+                            <span>Databricks</span>
+                        </div>
+                    </div>
+                    <div class="dataset-card">
+                        <div class="dataset-name">silver.fact_encounters</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Cleansed</span>
+                            <span>Databricks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UNIFIED -->
+                <div class="layer-col">
+                    <div class="layer-header">
+                        <h3>UNIFIED (Gold)</h3>
+                    </div>
+                    
+                    <div class="dataset-card">
+                        <div class="dataset-name">gold.clinical_summary</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Ready</span>
+                            <span>Snowflake / Denodo</span>
+                        </div>
+                    </div>
+                    <div class="dataset-card">
+                        <div class="dataset-name">gold.readmission_risk</div>
+                        <div class="dataset-meta">
+                            <span><i class="status-dot dot-green"></i> Ready</span>
+                            <span>ML Feature Store</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            
+            <!-- Quality Checks Table -->
+            <div class="panel">
+                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Validaciones de Calidad (DQ Rules)</h3>
+                    <button class="btn" id="btn-validate">Ejecutar Checks</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dataset</th>
+                            <th>Regla Aplicada</th>
+                            <th>Última Ejecución</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-family: var(--font-mono);">silver.dim_patient</td>
+                            <td>PK_Unique (PatientID)</td>
+                            <td>09:30 AM</td>
+                            <td><span class="badge badge-pass">Passed</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: var(--font-mono);">silver.dim_patient</td>
+                            <td>Not_Null (DateOfBirth)</td>
+                            <td>09:30 AM</td>
+                            <td><span class="badge badge-pass">Passed</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: var(--font-mono);">silver.fact_encounters</td>
+                            <td>Ref_Integrity (FacilityID)</td>
+                            <td>09:35 AM</td>
+                            <td><span class="badge badge-pass">Passed</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: var(--font-mono);">bronze.lab_metrics</td>
+                            <td>Value_Range (HeartRate > 0)</td>
+                            <td>08:15 AM</td>
+                            <td><span class="badge badge-fail">Failed (12 rows)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Incidents Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Incidentes Activos</h3>
+                </div>
+                <div>
+                    <div class="incident-item active">
+                        <div class="incident-header">
+                            <span class="incident-title" style="color: var(--status-critical);">[P1] Ingestión de EHR caída</span>
+                            <span class="incident-time">Hace 2h</span>
+                        </div>
+                        <div class="incident-desc">
+                            El job de Azure Data Factory `pipe_ingest_ehr` falló debido a un timeout en la conexión SFTP con el servidor on-premise. El reintento automático agotó los intentos.
+                        </div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-header">
+                            <span class="incident-title" style="color: var(--status-warning);">[P3] Anomalía de volumen</span>
+                            <span class="incident-time">Hace 5h</span>
+                        </div>
+                        <div class="incident-desc">
+                            El volumen del dataset `lab_results_json` está un 40% por debajo de la media histórica del martes. Investigando posible pérdida de paquetes en origen.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
