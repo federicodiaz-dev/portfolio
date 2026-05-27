@@ -1,137 +1,159 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Animated Counters
-    const animateValue = (obj, start, end, duration, formatFn = val => val) => {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            // ease out cubic
-            const easeOut = 1 - Math.pow(1 - progress, 3);
-            const currentVal = Math.floor(easeOut * (end - start) + start);
-            obj.innerHTML = formatFn(currentVal);
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                obj.innerHTML = formatFn(end);
-            }
-        };
-        window.requestAnimationFrame(step);
+    const listings = [
+        {
+            id: 'MLA-884',
+            title: 'Auriculares gamer 48hs bateria',
+            status: 'risk',
+            score: 61,
+            reason: 'Precio arriba del lider y CTR bajo.',
+            impact: '+$430k',
+            meta: ['Audio', '0.8% CTR', 'stock 9 dias'],
+            scores: { Titulo: 58, Precio: 42, Envio: 86 },
+            steps: ['Mover 48hs bateria al inicio.', 'Bajar precio 4% por 72 horas.', 'Cambiar imagen principal.']
+        },
+        {
+            id: 'MLA-241',
+            title: 'Smartwatch deportivo resistente al agua',
+            status: 'growth',
+            score: 78,
+            reason: 'Puede ganar ranking si entra a Full.',
+            impact: '+$215k',
+            meta: ['Wearables', '2.1% CTR', 'stock 18 dias'],
+            scores: { Titulo: 81, Precio: 76, Envio: 49 },
+            steps: ['Enviar lote piloto a Full.', 'Agregar compatibilidad Android/iOS.', 'Testear cupon mobile.']
+        },
+        {
+            id: 'MLA-399',
+            title: 'Teclado mecanico RGB switch red',
+            status: 'ok',
+            score: 92,
+            reason: 'Publicacion sana, margen estable.',
+            impact: '+$128k',
+            meta: ['Gaming', '4.2% CTR', 'stock 22 dias'],
+            scores: { Titulo: 94, Precio: 89, Envio: 93 },
+            steps: ['Escalar pauta 18%.', 'Crear bundle con mouse.', 'Proteger stock antes del pico.']
+        },
+        {
+            id: 'MLA-812',
+            title: 'Notebook Ryzen 7 16GB ultraliviana',
+            status: 'risk',
+            score: 57,
+            reason: 'Ticket alto con quiebre proyectado.',
+            impact: '+$690k',
+            meta: ['Computacion', '2.9% CTR', 'stock 4 dias'],
+            scores: { Titulo: 79, Precio: 71, Envio: 38 },
+            steps: ['Reponer 40 unidades.', 'Responder preguntas de garantia.', 'Pausar descuentos.']
+        }
+    ];
+
+    const activity = [
+        ['09:44', 'Audio: competidor bajo precio 6.8%.'],
+        ['09:31', 'Busqueda "auriculares gamer" subio 22%.'],
+        ['09:12', 'Notebook Ryzen entra en riesgo de stock.'],
+        ['08:58', 'Smartwatch habilitado para envio Full.']
+    ];
+
+    const els = {
+        accountScore: document.getElementById('accountScore'),
+        listingList: document.getElementById('listingList'),
+        detailTitle: document.getElementById('detailTitle'),
+        detailText: document.getElementById('detailText'),
+        detailMeta: document.getElementById('detailMeta'),
+        scoreList: document.getElementById('scoreList'),
+        nextSteps: document.getElementById('nextSteps'),
+        titleInput: document.getElementById('titleInput'),
+        analyzeBtn: document.getElementById('analyzeBtn'),
+        titleScore: document.getElementById('titleScore'),
+        titleFeedback: document.getElementById('titleFeedback'),
+        activityFeed: document.getElementById('activityFeed')
     };
 
-    // Formatters
-    const numFormatter = new Intl.NumberFormat('es-AR');
-    const currencyFormatter = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
+    let activeId = listings[0].id;
 
-    const impressionsEl = document.getElementById('metric-impressions');
-    const conversionEl = document.getElementById('metric-conversion');
-    const salesEl = document.getElementById('metric-sales');
+    function renderListings(filter = 'all') {
+        const visible = listings.filter(item => filter === 'all' || item.status === filter);
+        if (!visible.some(item => item.id === activeId)) activeId = visible[0]?.id || listings[0].id;
 
-    if (impressionsEl) animateValue(impressionsEl, 0, 1425890, 2000, val => numFormatter.format(val));
-    if (conversionEl) animateValue(conversionEl, 0, 32, 1500, val => (val / 10).toFixed(1) + '%');
-    if (salesEl) animateValue(salesEl, 0, 8450000, 2000, val => currencyFormatter.format(val));
+        els.listingList.innerHTML = visible.map(item => `
+            <button class="listing ${item.id === activeId ? 'active' : ''}" data-id="${item.id}">
+                <span>
+                    <h3>${item.title}</h3>
+                    <small>${item.id} / ${item.reason}</small>
+                </span>
+                <strong class="listing-score ${item.status}">${item.score}</strong>
+            </button>
+        `).join('');
 
-
-    // 2. Table Filtering
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const tableRows = document.querySelectorAll('.pub-row');
-
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active state
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const filter = btn.getAttribute('data-filter');
-
-            tableRows.forEach(row => {
-                if (filter === 'all' || row.getAttribute('data-status') === filter) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+        els.listingList.querySelectorAll('.listing').forEach(button => {
+            button.addEventListener('click', () => {
+                activeId = button.dataset.id;
+                renderListings(filter);
+                renderDetail();
             });
+        });
+
+        renderDetail();
+    }
+
+    function renderDetail() {
+        const item = listings.find(listing => listing.id === activeId) || listings[0];
+        els.detailTitle.textContent = item.title;
+        els.detailText.textContent = item.reason;
+        els.detailMeta.innerHTML = item.meta.map(meta => `<span class="pill">${meta}</span>`).join('');
+        els.scoreList.innerHTML = Object.entries(item.scores).map(([label, value]) => `
+            <div class="score-row">
+                <span>${label}</span>
+                <div class="bar"><span style="--value:${value}%"></span></div>
+                <strong>${value}</strong>
+            </div>
+        `).join('');
+        els.nextSteps.innerHTML = item.steps.map(step => `<li>${step}</li>`).join('');
+    }
+
+    function analyzeTitle() {
+        const value = els.titleInput.value.trim().toLowerCase();
+        const checks = [
+            value.length >= 48 && value.length <= 70 ? 24 : 13,
+            /(auriculares|notebook|smartwatch|teclado|camara)/.test(value) ? 26 : 12,
+            /(\d|bateria|rgb|ryzen|dpi|inalambrico|full)/.test(value) ? 27 : 14,
+            /(oferta|barato|promo|imperdible)/.test(value) ? 9 : 23
+        ];
+        const score = checks.reduce((sum, item) => sum + item, 0);
+        els.titleScore.textContent = score;
+        els.titleFeedback.textContent = score >= 82
+            ? 'Claro, buscable y con atributos concretos.'
+            : score >= 68
+                ? 'Buen titulo; conviene sumar un atributo fuerte.'
+                : 'Le falta intencion de busqueda y precision.';
+    }
+
+    document.querySelectorAll('[data-filter]').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('[data-filter]').forEach(item => item.classList.remove('active'));
+            button.classList.add('active');
+            renderListings(button.dataset.filter);
         });
     });
 
+    els.analyzeBtn.addEventListener('click', analyzeTitle);
+    els.titleInput.addEventListener('keydown', event => {
+        if (event.key === 'Enter') analyzeTitle();
+    });
 
-    // 3. SEO Simulator
-    const seoBtn = document.getElementById('btn-analyze');
-    const seoInput = document.getElementById('input-title');
-    const seoResults = document.getElementById('seo-results');
-    const scoreCircle = document.getElementById('score-circle');
-    const tipsList = document.getElementById('seo-tips');
+    els.activityFeed.innerHTML = activity.map(([time, text]) => `
+        <div class="event">
+            <time>${time}</time>
+            <p>${text}</p>
+        </div>
+    `).join('');
 
-    if (seoBtn) {
-        seoBtn.addEventListener('click', () => {
-            const title = seoInput.value.trim();
-            if (!title) return;
+    let score = 76;
+    const scoreTimer = setInterval(() => {
+        score += 1;
+        els.accountScore.textContent = score;
+        if (score === 84) clearInterval(scoreTimer);
+    }, 55);
 
-            // Simulate loading
-            seoBtn.textContent = 'Analizando...';
-            seoBtn.disabled = true;
-
-            setTimeout(() => {
-                analyzeTitle(title);
-                seoBtn.textContent = 'Analizar Título';
-                seoBtn.disabled = false;
-            }, 800);
-        });
-    }
-
-    function analyzeTitle(title) {
-        // Simple heuristic for demonstration
-        let score = 100;
-        const tips = [];
-        const length = title.length;
-
-        if (length < 30) {
-            score -= 30;
-            tips.push('El título es muy corto. Intenta usar entre 45 y 60 caracteres.');
-        } else if (length > 60) {
-            score -= 15;
-            tips.push('El título roza el límite. Asegúrate de poner lo más importante al principio.');
-        } else {
-            tips.push('Longitud óptima (' + length + ' caracteres).');
-        }
-
-        const keywords = ['original', 'nuevo', 'oferta', 'envio gratis'];
-        let hasKeywords = false;
-        keywords.forEach(kw => {
-            if (title.toLowerCase().includes(kw)) hasKeywords = true;
-        });
-
-        if (!hasKeywords) {
-            score -= 20;
-            tips.push('Faltan palabras gancho (ej. Original, Nuevo).');
-        } else {
-            tips.push('Contiene palabras clave atractivas para el comprador.');
-        }
-
-        if (!/\d/.test(title)) {
-            score -= 10;
-            tips.push('Considera agregar características numéricas (ej. 128GB, 500W).');
-        }
-
-        score = Math.max(0, score);
-
-        // Update UI
-        seoResults.classList.add('active');
-        
-        // Reset classes
-        scoreCircle.className = 'score-circle';
-        if (score >= 80) scoreCircle.classList.add('score-excellent');
-        else if (score >= 50) scoreCircle.classList.add('score-warning');
-        else scoreCircle.classList.add('score-poor');
-
-        // Animate score
-        animateValue(scoreCircle, 0, score, 1000);
-
-        // Update tips
-        tipsList.innerHTML = '';
-        tips.forEach(tip => {
-            const li = document.createElement('li');
-            li.textContent = tip;
-            tipsList.appendChild(li);
-        });
-    }
+    renderListings();
+    analyzeTitle();
 });

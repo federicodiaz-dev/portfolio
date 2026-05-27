@@ -3,200 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recruiting Metrics Lab - Case Study</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Recruiting Metrics Lab</title>
+    <meta name="description" content="Producto HR Tech para evaluar candidatos tecnicos con scorecards claros y decisiones explicables.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <header class="header">
-        <div class="logo">
-            Recruiting<span>Lab</span>
-        </div>
-        <a href="../../index.html" class="back-link">
-            ← Volver al Portfolio
-        </a>
+    <header class="studio-header">
+        <a href="../../index.html" class="back">&larr; Portfolio</a>
+        <strong>Recruiting Metrics Lab</strong>
+        <span>Rubrica v4.1</span>
     </header>
 
-    <main class="container">
-        
+    <main class="page">
         <section class="hero">
-            <h1>Laboratorio Analítico de Recruiting</h1>
-            <p>Plataforma híbrida HR Tech para evaluar el rendimiento técnico de candidatos. Combina métricas de evaluación automatizada con análisis de skills detallado.</p>
+            <div>
+                <span class="eyebrow">Talent decision studio</span>
+                <h1>Evaluar talento tecnico sin convertirlo en una planilla eterna.</h1>
+                <p>Un producto para recruiters y hiring managers: evidencia breve, rubrica clara y proxima decision visible.</p>
+                <div class="hero-actions">
+                    <button id="calibrateBtn">Calibrar cohorte</button>
+                    <button id="startBtn" class="ghost">Iniciar assessment</button>
+                </div>
+            </div>
+            <aside class="talent-card">
+                <span>Pipeline snapshot</span>
+                <strong>6 candidatos</strong>
+                <div class="snapshot-grid">
+                    <div><b>82</b><small>score medio</small></div>
+                    <div><b id="driftValue">12%</b><small>drift</small></div>
+                    <div><b>38m</b><small>time to signal</small></div>
+                </div>
+            </aside>
         </section>
 
-        <!-- KPIs -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-label">Candidatos Evaluados (Q3)</div>
-                <div class="kpi-value">142</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Tasa de Aprobación</div>
-                <div class="kpi-value">34.5%</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Tiempo Promedio Resolución</div>
-                <div class="kpi-value">48m</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Skill con mayor déficit</div>
-                <div class="kpi-value" style="font-size: 1.5rem; color: var(--status-fail);">System Design</div>
-            </div>
-        </div>
+        <nav id="roleFilters" class="role-filters" aria-label="Filtro por rol">
+            <button class="active" data-role="all">Todos</button>
+            <button data-role="frontend">Frontend</button>
+            <button data-role="backend">Backend</button>
+            <button data-role="data">Data</button>
+        </nav>
 
-        <div class="main-grid">
-            
-            <!-- Left Side: Table & Test -->
+        <section class="workspace">
+            <div class="candidate-column">
+                <div class="section-title">
+                    <h2>Decision board</h2>
+                    <p>Cada card resume una decision posible.</p>
+                </div>
+                <div id="candidateDeck" class="candidate-deck"></div>
+            </div>
+
+            <aside class="profile-panel">
+                <span class="profile-label">Perfil seleccionado</span>
+                <h2 id="profileName"></h2>
+                <p id="profileRole"></p>
+                <p id="profileSummary" class="summary"></p>
+                <div id="skillBars" class="skill-bars"></div>
+                <ul id="evidenceList" class="evidence-list"></ul>
+            </aside>
+        </section>
+
+        <section class="interview-kit">
             <div>
-                <!-- Candidate Table -->
-                <div class="card" style="margin-bottom: 2rem;">
-                    <div class="card-header">
-                        <div class="card-title">Directorio de Candidatos (Simulado)</div>
-                        <div class="table-filters">
-                            <button class="filter-btn active" data-role="all">Todos</button>
-                            <button class="filter-btn" data-role="front">Frontend</button>
-                            <button class="filter-btn" data-role="back">Backend</button>
-                            <button class="filter-btn" data-role="data">Data</button>
-                        </div>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Candidato</th>
-                                    <th>Rol</th>
-                                    <th>Puntaje Global</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="cand-row" id="cand-1" data-role="front">
-                                    <td style="font-weight: 500;">Laura M.</td>
-                                    <td><span class="role-badge role-front">Frontend</span></td>
-                                    <td>
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                                            <span>92/100</span>
-                                        </div>
-                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 92%;"></div></div>
-                                    </td>
-                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
-                                </tr>
-                                <tr class="cand-row" id="cand-2" data-role="back">
-                                    <td style="font-weight: 500;">Carlos T.</td>
-                                    <td><span class="role-badge role-back">Backend</span></td>
-                                    <td>
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                                            <span>88/100</span>
-                                        </div>
-                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 88%;"></div></div>
-                                    </td>
-                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
-                                </tr>
-                                <tr class="cand-row" id="cand-3" data-role="data">
-                                    <td style="font-weight: 500;">Sofia R.</td>
-                                    <td><span class="role-badge role-data">Data Analyst</span></td>
-                                    <td>
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                                            <span>95/100</span>
-                                        </div>
-                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 95%;"></div></div>
-                                    </td>
-                                    <td style="color: var(--status-pass); font-weight: 500;">Aprobado</td>
-                                </tr>
-                                <tr class="cand-row" data-role="front">
-                                    <td style="font-weight: 500;">Diego L.</td>
-                                    <td><span class="role-badge role-front">Frontend</span></td>
-                                    <td>
-                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 2px;">
-                                            <span>45/100</span>
-                                        </div>
-                                        <div class="score-bar-bg"><div class="score-bar-fill" style="width: 45%; background: var(--status-fail);"></div></div>
-                                    </td>
-                                    <td style="color: var(--status-fail); font-weight: 500;">Rechazado</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Test Engine Mock -->
-                <div class="card test-engine">
-                    <div class="card-header">
-                        <div class="card-title">Simulador de Motor de Pruebas</div>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <div class="test-question">
-                            <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 0.5rem;">Pregunta 4/10 • Algoritmos</div>
-                            <div class="question-text">
-                                ¿Cuál es la complejidad temporal promedio para buscar un elemento en un Hash Table (Diccionario)?
-                            </div>
-                            <div class="options">
-                                <button class="option-btn" data-correct="false">A. O(n)</button>
-                                <button class="option-btn" data-correct="false">B. O(log n)</button>
-                                <button class="option-btn" data-correct="true">C. O(1)</button>
-                                <button class="option-btn" data-correct="false">D. O(n log n)</button>
-                            </div>
-                            <div class="test-feedback" id="test-feedback"></div>
-                        </div>
-                    </div>
-                </div>
-
+                <span class="eyebrow">Structured interview kit</span>
+                <h2>Una pregunta, una senal, una decision.</h2>
+                <p>El assessment muestra feedback inmediato y evita esconder la evaluacion en textos largos.</p>
             </div>
-
-            <!-- Right Side: Details Panel -->
-            <div class="card" style="height: fit-content; position: sticky; top: 2rem;">
-                <div class="card-header">
-                    <div class="card-title">Perfil del Candidato</div>
-                </div>
-                
-                <div id="details-empty" class="details-empty">
-                    Selecciona un candidato de la tabla para ver su análisis detallado.
-                </div>
-
-                <div id="candidate-details" class="candidate-details">
-                    <div class="cand-header">
-                        <div class="cand-avatar" id="d-avatar">LM</div>
-                        <div>
-                            <div class="cand-name" id="d-name">Laura M.</div>
-                            <div class="cand-role" id="d-role">Frontend Engineer</div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-                        <div>
-                            <h4 style="font-size: 0.75rem; margin-bottom: 0;">Score Técnico</h4>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);" id="d-score">92/100</div>
-                        </div>
-                        <div>
-                            <h4 style="font-size: 0.75rem; margin-bottom: 0;">Tiempo Uso</h4>
-                            <div style="font-size: 1.5rem; font-weight: 700;" id="d-time">45 min</div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <h4>Áreas Fuertes</h4>
-                        <div class="skill-tags" id="d-strong">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <h4>Oportunidades de Mejora</h4>
-                        <div class="skill-tags" id="d-weak">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
-                        <button style="width: 100%; background: var(--text-primary); color: white; border: none; padding: 0.75rem; border-radius: 6px; font-weight: 500; cursor: pointer;">Descargar Reporte PDF</button>
-                    </div>
-                </div>
+            <div class="question-card">
+                <span id="questionCounter">1 / 3</span>
+                <h3 id="questionText"></h3>
+                <div id="answerOptions" class="answer-options"></div>
+                <p id="feedbackBox" class="feedback"></p>
             </div>
-
-        </div>
-
+        </section>
     </main>
 
     <script src="script.js"></script>

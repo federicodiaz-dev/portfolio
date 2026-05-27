@@ -1,146 +1,117 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    const endpoints = {
-        'auth-login': {
-            method: 'POST',
-            url: 'https://api.nexus.com/v1/auth/login',
-            color: 'var(--method-post)',
-            response: {
-                "status": "success",
-                "data": {
-                    "token": "eyJhbGciOiJIUzI1NiIsInR...",
-                    "expires_in": 3600,
-                    "user": {
-                        "id": "usr_98213",
-                        "email": "dev@nexus.com",
-                        "role": "admin"
-                    }
-                }
-            },
-            time: '124ms',
-            status: '200 OK'
-        },
-        'projects-list': {
+    const endpoints = [
+        {
+            id: 'orders',
+            name: 'Orders API',
             method: 'GET',
-            url: 'https://api.nexus.com/v1/projects?limit=10',
-            color: 'var(--method-get)',
-            response: {
-                "meta": { "total": 42, "page": 1 },
-                "data": [
-                    { "id": "prj_1", "name": "Migration to Cloud", "status": "active" },
-                    { "id": "prj_2", "name": "API Gateway Setup", "status": "completed" }
-                ]
-            },
-            time: '45ms',
-            status: '200 OK'
+            path: '/v2/orders/{orderId}',
+            desc: 'Consulta una orden con trazabilidad, pagos y estado logistico.',
+            availability: '99.94%',
+            latency: 182,
+            score: 91,
+            policies: [['good', 'JWT'], ['good', 'rate limit'], ['good', 'schema validation'], ['warn', 'missing example']],
+            response: { orderId: 'ORD-24591', status: 'in_transit', traceId: 'trc_91ac2', owner: 'commerce-platform' }
         },
-        'users-delete': {
-            method: 'DELETE',
-            url: 'https://api.nexus.com/v1/users/usr_4412',
-            color: 'var(--method-delete)',
-            response: {
-                "status": "success",
-                "message": "User permanently deleted.",
-                "deleted_at": "2025-05-26T14:22:10Z"
-            },
-            time: '210ms',
-            status: '204 No Content'
+        {
+            id: 'risk',
+            name: 'Risk Scoring',
+            method: 'POST',
+            path: '/v1/risk/score',
+            desc: 'Evalua senales de fraude y devuelve una decision explicable.',
+            availability: '99.88%',
+            latency: 236,
+            score: 84,
+            policies: [['good', 'JWT'], ['warn', 'PII review'], ['good', 'audit log'], ['good', 'timeout 800ms']],
+            response: { score: 0.18, decision: 'approve', reasons: ['known_device', 'low_velocity'], traceId: 'trc_77bf0' }
+        },
+        {
+            id: 'identity',
+            name: 'Identity API',
+            method: 'PATCH',
+            path: '/v3/users/{userId}/profile',
+            desc: 'Actualiza perfil con contrato estricto y auditoria de cambios.',
+            availability: '99.97%',
+            latency: 154,
+            score: 96,
+            policies: [['good', 'OAuth scopes'], ['good', 'RBAC'], ['good', 'idempotency'], ['good', 'audit log']],
+            response: { userId: 'usr_932', changed: ['phone'], version: 17, traceId: 'trc_52ae9' }
         }
-    };
+    ];
 
-    const apiItems = document.querySelectorAll('.api-item');
-    const methodSelect = document.getElementById('method-select');
-    const urlInput = document.getElementById('url-input');
-    const btnSend = document.getElementById('btn-send');
-    const jsonOutput = document.getElementById('json-output');
-    const resStatus = document.getElementById('res-status');
-    const resTime = document.getElementById('res-time');
-    const copyBtn = document.getElementById('copy-btn');
+    const endpointList = document.getElementById('endpointList');
+    const serviceName = document.getElementById('serviceName');
+    const servicePath = document.getElementById('servicePath');
+    const methodBadge = document.getElementById('methodBadge');
+    const urlInput = document.getElementById('urlInput');
+    const policyList = document.getElementById('policyList');
+    const availabilityValue = document.getElementById('availabilityValue');
+    const latencyValue = document.getElementById('latencyValue');
+    const contractScore = document.getElementById('contractScore');
+    const responseMeta = document.getElementById('responseMeta');
+    const jsonOutput = document.getElementById('jsonOutput');
+    const contractOutput = document.getElementById('contractOutput');
+    let active = endpoints[0].id;
 
-    let currentEndpoint = 'auth-login';
+    function selected() {
+        return endpoints.find(endpoint => endpoint.id === active) || endpoints[0];
+    }
 
-    // Highlight JSON function
-    function syntaxHighlight(json) {
-        if (typeof json != 'string') {
-            json = JSON.stringify(json, undefined, 4);
-        }
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            let cls = 'json-number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'json-key';
-                } else {
-                    cls = 'json-string';
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'json-boolean';
-            } else if (/null/.test(match)) {
-                cls = 'json-boolean';
+    function renderRail() {
+        endpointList.innerHTML = endpoints.map(endpoint => `
+            <button class="endpoint ${endpoint.id === active ? 'active' : ''}" data-id="${endpoint.id}">
+                <strong>${endpoint.name}</strong>
+                <small>${endpoint.method} ${endpoint.path}</small>
+            </button>
+        `).join('');
+
+        endpointList.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                active = button.dataset.id;
+                render();
+            });
+        });
+    }
+
+    function render() {
+        const endpoint = selected();
+        renderRail();
+        serviceName.textContent = endpoint.name;
+        servicePath.textContent = endpoint.desc;
+        methodBadge.textContent = endpoint.method;
+        urlInput.value = endpoint.path;
+        availabilityValue.textContent = endpoint.availability;
+        latencyValue.textContent = `${endpoint.latency}ms`;
+        contractScore.textContent = endpoint.score;
+        policyList.innerHTML = endpoint.policies.map(([state, text]) => `<span class="policy ${state}">${text}</span>`).join('');
+        responseMeta.textContent = 'idle';
+        jsonOutput.textContent = JSON.stringify({ status: 'ready', endpoint: endpoint.path }, null, 2);
+    }
+
+    document.getElementById('sendRequest').addEventListener('click', () => {
+        const endpoint = selected();
+        const latency = endpoint.latency + Math.floor(Math.random() * 28);
+        responseMeta.textContent = `200 OK / ${latency}ms`;
+        latencyValue.textContent = `${latency}ms`;
+        jsonOutput.textContent = JSON.stringify({
+            ok: true,
+            endpoint: endpoint.path,
+            data: endpoint.response,
+            governance: {
+                contractScore: endpoint.score,
+                policies: endpoint.policies.map(([, policy]) => policy)
             }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
-    }
-
-    // Load endpoint data
-    function loadEndpoint(id) {
-        const data = endpoints[id];
-        if (!data) return;
-        
-        currentEndpoint = id;
-        
-        methodSelect.value = data.method;
-        methodSelect.style.color = data.color;
-        urlInput.value = data.url;
-
-        // Clear output
-        jsonOutput.innerHTML = '// Click "Send Request" to fetch data...';
-        resStatus.textContent = '---';
-        resTime.textContent = '0ms';
-
-        // Update active class
-        apiItems.forEach(item => {
-            if(item.getAttribute('data-id') === id) item.classList.add('active');
-            else item.classList.remove('active');
-        });
-    }
-
-    // Initial load
-    loadEndpoint('auth-login');
-
-    // Click on sidebar items
-    apiItems.forEach(item => {
-        item.addEventListener('click', () => {
-            loadEndpoint(item.getAttribute('data-id'));
-        });
+        }, null, 2);
     });
 
-    // Send Request
-    btnSend.addEventListener('click', () => {
-        const data = endpoints[currentEndpoint];
-        
-        btnSend.textContent = 'Sending...';
-        btnSend.disabled = true;
-        jsonOutput.innerHTML = '<i>Fetching response...</i>';
-        
-        setTimeout(() => {
-            btnSend.textContent = 'Send Request';
-            btnSend.disabled = false;
-            
-            resStatus.textContent = data.status;
-            resTime.textContent = data.time;
-            
-            jsonOutput.innerHTML = syntaxHighlight(data.response);
-        }, 600);
+    document.getElementById('runContract').addEventListener('click', () => {
+        const endpoint = selected();
+        const warning = endpoint.score < 90 ? 'warning: one policy needs review' : 'no breaking changes';
+        contractOutput.textContent = `$ openapi-diff current.yaml proposed.yaml
+service: ${endpoint.name}
+score: ${endpoint.score}/100
+result: ${warning}
+next: ${endpoint.score < 90 ? 'request owner approval' : 'safe to deploy'}`;
     });
 
-    // Copy JSON
-    if(copyBtn) {
-        copyBtn.addEventListener('click', () => {
-            const data = endpoints[currentEndpoint].response;
-            navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => copyBtn.textContent = 'Copy JSON', 2000);
-        });
-    }
+    render();
 });

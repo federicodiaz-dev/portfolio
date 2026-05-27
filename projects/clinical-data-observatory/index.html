@@ -3,232 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Data Observatory - Case Study</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Clinical Data Observatory</title>
+    <meta name="description" content="Observatorio de datos clinicos con freshness, calidad y linaje para equipos de salud.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon"></div>
+    <header class="clinic-header">
+        <a href="../../index.html" class="back-link">&larr; Portfolio</a>
+        <div class="brand">
+            <span class="brand-mark"></span>
             Clinical Data Observatory
         </div>
-        <a href="../../index.html" class="back-link">
-            <span>←</span> Volver al Portfolio
-        </a>
+        <span class="environment">PHI safe demo</span>
     </header>
 
-    <main class="container">
-        
+    <main class="page">
         <section class="hero">
-            <h1>Monitoreo de Pipelines Clínicos</h1>
-            <p>Observatorio enterprise simulado para la gestión de calidad, linaje y estado de sincronización de datos médicos a través de arquitecturas Medallion (RAW a UNIFIED).</p>
+            <div class="hero-copy">
+                <span class="eyebrow">Healthcare data reliability</span>
+                <h1>Datos clinicos confiables antes de que lleguen al equipo medico.</h1>
+                <p>Un observatorio claro para saber si los datasets estan frescos, completos y listos para consumo. Sin ruido: solo estado, causa y proxima accion.</p>
+                <div class="hero-actions">
+                    <button id="refreshState">Actualizar estado</button>
+                    <button id="runQuality" class="secondary">Correr reglas</button>
+                </div>
+            </div>
+
+            <aside class="vitals-card" aria-label="Estado general">
+                <div class="vitals-top">
+                    <span>Reliability index</span>
+                    <strong id="reliabilityScore">96</strong>
+                </div>
+                <svg class="pulse-line" viewBox="0 0 360 54" aria-hidden="true">
+                    <polyline points="0,28 44,28 58,12 76,44 96,28 154,28 170,18 188,38 208,28 360,28"></polyline>
+                </svg>
+                <div class="vitals-grid">
+                    <div><b>18m</b><small>freshness media</small></div>
+                    <div><b>2</b><small>alertas abiertas</small></div>
+                    <div><b>100%</b><small>PHI masking</small></div>
+                </div>
+                <p id="lastSync">Sincronizado 09:42</p>
+            </aside>
         </section>
 
-        <!-- Status Panel -->
-        <div class="status-panel">
-            <div class="status-card healthy">
-                <div class="status-label">Pipelines Activos</div>
-                <div class="status-value" id="pipelines-active">24</div>
+        <section class="care-path" aria-label="Flujo de datos">
+            <div>
+                <span>01</span>
+                <strong>EHR ingest</strong>
+                <p>Eventos, citas y diagnosticos entran con watermark.</p>
             </div>
-            <div class="status-card">
-                <div class="status-label">Última Actualización</div>
-                <div class="status-value" id="last-update" style="font-size: 1.2rem; margin-top: 0.5rem;">Hoy, 09:42</div>
+            <div>
+                <span>02</span>
+                <strong>Quality gate</strong>
+                <p>Reglas criticas bloquean datos incompletos.</p>
             </div>
-            <div class="status-card warning">
-                <div class="status-label">Datasets con Alertas</div>
-                <div class="status-value" style="color: var(--status-warning);">3</div>
+            <div>
+                <span>03</span>
+                <strong>Clinical BI</strong>
+                <p>Dashboards y modelos reciben solo datasets confiables.</p>
             </div>
-            <div class="status-card healthy">
-                <div class="status-label">Calidad Promedio (DQ)</div>
-                <div class="status-value">99.4%</div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Data Layers (Medallion Architecture) -->
-        <div class="layers-container">
-            <h2>
-                Arquitectura de Datos (Lineage)
-                <button class="btn btn-primary" id="btn-refresh">⟳ Sincronizar Estado</button>
-            </h2>
-            
-            <div class="layers-grid">
-                
-                <!-- RAW -->
-                <div class="layer-col">
-                    <div class="layer-header">
-                        <h3>RAW LAYER</h3>
-                    </div>
-                    
-                    <div class="dataset-card">
-                        <div class="dataset-name">hl7_admissions_raw</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Ingested</span>
-                            <span>ADLS Gen2</span>
-                        </div>
-                    </div>
-                    <div class="dataset-card">
-                        <div class="dataset-name">lab_results_json</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Ingested</span>
-                            <span>Blob Storage</span>
-                        </div>
-                    </div>
-                    <div class="dataset-card" style="border-color: var(--status-warning);">
-                        <div class="dataset-name">ehr_patient_dumps</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-yellow"></i> Delayed (2h)</span>
-                            <span>SFTP</span>
-                        </div>
-                    </div>
+        <section class="observatory">
+            <div class="dataset-panel">
+                <div class="section-title">
+                    <h2>Datasets monitoreados</h2>
+                    <p>Selecciona uno para ver su estado operativo.</p>
                 </div>
-
-                <!-- FOUNDATION -->
-                <div class="layer-col">
-                    <div class="layer-header">
-                        <h3>FOUNDATION (Bronze)</h3>
-                    </div>
-                    
-                    <div class="dataset-card">
-                        <div class="dataset-name">bronze.admissions</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Parsed</span>
-                            <span>Delta Table</span>
-                        </div>
-                    </div>
-                    <div class="dataset-card">
-                        <div class="dataset-name">bronze.lab_metrics</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Parsed</span>
-                            <span>Delta Table</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TRUSTED -->
-                <div class="layer-col">
-                    <div class="layer-header">
-                        <h3>TRUSTED (Silver)</h3>
-                    </div>
-                    
-                    <div class="dataset-card">
-                        <div class="dataset-name">silver.dim_patient</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Cleansed</span>
-                            <span>Databricks</span>
-                        </div>
-                    </div>
-                    <div class="dataset-card">
-                        <div class="dataset-name">silver.fact_encounters</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Cleansed</span>
-                            <span>Databricks</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- UNIFIED -->
-                <div class="layer-col">
-                    <div class="layer-header">
-                        <h3>UNIFIED (Gold)</h3>
-                    </div>
-                    
-                    <div class="dataset-card">
-                        <div class="dataset-name">gold.clinical_summary</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Ready</span>
-                            <span>Snowflake / Denodo</span>
-                        </div>
-                    </div>
-                    <div class="dataset-card">
-                        <div class="dataset-name">gold.readmission_risk</div>
-                        <div class="dataset-meta">
-                            <span><i class="status-dot dot-green"></i> Ready</span>
-                            <span>ML Feature Store</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="bottom-grid">
-            
-            <!-- Quality Checks Table -->
-            <div class="panel">
-                <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3>Validaciones de Calidad (DQ Rules)</h3>
-                    <button class="btn" id="btn-validate">Ejecutar Checks</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Dataset</th>
-                            <th>Regla Aplicada</th>
-                            <th>Última Ejecución</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-family: var(--font-mono);">silver.dim_patient</td>
-                            <td>PK_Unique (PatientID)</td>
-                            <td>09:30 AM</td>
-                            <td><span class="badge badge-pass">Passed</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-family: var(--font-mono);">silver.dim_patient</td>
-                            <td>Not_Null (DateOfBirth)</td>
-                            <td>09:30 AM</td>
-                            <td><span class="badge badge-pass">Passed</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-family: var(--font-mono);">silver.fact_encounters</td>
-                            <td>Ref_Integrity (FacilityID)</td>
-                            <td>09:35 AM</td>
-                            <td><span class="badge badge-pass">Passed</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-family: var(--font-mono);">bronze.lab_metrics</td>
-                            <td>Value_Range (HeartRate > 0)</td>
-                            <td>08:15 AM</td>
-                            <td><span class="badge badge-fail">Failed (12 rows)</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div id="datasetList" class="dataset-list"></div>
             </div>
 
-            <!-- Incidents Panel -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h3>Incidentes Activos</h3>
-                </div>
-                <div>
-                    <div class="incident-item active">
-                        <div class="incident-header">
-                            <span class="incident-title" style="color: var(--status-critical);">[P1] Ingestión de EHR caída</span>
-                            <span class="incident-time">Hace 2h</span>
-                        </div>
-                        <div class="incident-desc">
-                            El job de Azure Data Factory `pipe_ingest_ehr` falló debido a un timeout en la conexión SFTP con el servidor on-premise. El reintento automático agotó los intentos.
-                        </div>
+            <aside class="dataset-detail">
+                <span class="detail-label">Dataset activo</span>
+                <h2 id="datasetName"></h2>
+                <p id="datasetDesc"></p>
+                <div id="datasetMeta" class="meta-row"></div>
+                <div class="freshness">
+                    <div>
+                        <span>Freshness SLA</span>
+                        <strong id="freshnessValue"></strong>
                     </div>
-                    <div class="incident-item">
-                        <div class="incident-header">
-                            <span class="incident-title" style="color: var(--status-warning);">[P3] Anomalía de volumen</span>
-                            <span class="incident-time">Hace 5h</span>
-                        </div>
-                        <div class="incident-desc">
-                            El volumen del dataset `lab_results_json` está un 40% por debajo de la media histórica del martes. Investigando posible pérdida de paquetes en origen.
-                        </div>
-                    </div>
+                    <div class="freshness-bar"><span id="freshnessBar"></span></div>
                 </div>
+                <div id="qualityRules" class="rule-stack"></div>
+            </aside>
+        </section>
+
+        <section class="incident-room">
+            <div class="section-title">
+                <h2>Incident room</h2>
+                <p>Una sola alerta explicada con causa, impacto y accion.</p>
             </div>
-
-        </div>
-
+            <div id="incidentSteps" class="incident-steps"></div>
+        </section>
     </main>
 
     <script src="script.js"></script>

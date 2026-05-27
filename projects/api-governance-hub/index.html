@@ -1,139 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Governance Hub - Case Study</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>API Governance Hub</title>
+    <meta name="description" content="Consola tecnica para gobernar APIs, contratos, politicas y respuestas en una plataforma interna.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <header class="header">
-        <div class="logo">
-            Nexus<span>API</span> Hub
-        </div>
-        <a href="../../index.html" class="back-link">
-            ../return_to_portfolio
-        </a>
+    <header class="terminal-header">
+        <a href="../../index.html">../portfolio</a>
+        <strong>api-governance-hub</strong>
+        <span>prod gateway healthy</span>
     </header>
 
-    <main class="container">
-        
+    <main class="terminal-page">
         <section class="hero">
-            <h1>API Governance Hub</h1>
-            <p>Plataforma centralizada para explorar, probar y monitorear microservicios. Simulación de un entorno real con JSON parsing, control de métodos y métricas de endpoints.</p>
+            <span class="prompt">platform@hub:~$ open governance-console</span>
+            <h1>Una consola para que las APIs no crezcan sin control.</h1>
+            <p>Catalogo, request seguro, score de contrato y politicas visibles en la misma pantalla. Pensado para platform teams que necesitan gobernar sin frenar a los devs.</p>
         </section>
 
-        <div class="grid-layout">
-            
-            <!-- Sidebar Catalog -->
-            <aside class="catalog">
-                <div class="catalog-header">
-                    // API_CATALOG
-                </div>
-                
-                <ul class="api-list">
-                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">AUTH SERVICE</li>
-                    
-                    <li class="api-item" data-id="auth-login">
-                        <div class="api-name">
-                            <span>POST /login</span>
-                            <span class="api-status"></span>
-                        </div>
-                        <div class="api-meta">
-                            <span>v1.2</span>
-                            <span>JWT</span>
-                        </div>
-                    </li>
-                    
-                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">PROJECTS SERVICE</li>
-                    
-                    <li class="api-item" data-id="projects-list">
-                        <div class="api-name">
-                            <span>GET /projects</span>
-                            <span class="api-status"></span>
-                        </div>
-                        <div class="api-meta">
-                            <span>v2.0</span>
-                            <span>Cache: ON</span>
-                        </div>
-                    </li>
-
-                    <li style="padding: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">USERS SERVICE</li>
-                    
-                    <li class="api-item" data-id="users-delete">
-                        <div class="api-name">
-                            <span>DELETE /users/{id}</span>
-                            <span class="api-status" style="background: var(--status-warning);"></span>
-                        </div>
-                        <div class="api-meta">
-                            <span>v1.0</span>
-                            <span>Admin Only</span>
-                        </div>
-                    </li>
-                </ul>
+        <section class="console-grid">
+            <aside class="service-rail">
+                <div class="rail-title">services.yaml</div>
+                <div id="endpointList" class="endpoint-list"></div>
             </aside>
 
-            <!-- Main Explorer -->
-            <section class="explorer">
-                
-                <!-- Request Panel -->
-                <div class="panel">
-                    <div class="panel-title">Request Builder</div>
-                    <div class="request-builder">
-                        <div class="url-bar">
-                            <select class="method-select" id="method-select">
-                                <option value="GET" style="color: var(--method-get)">GET</option>
-                                <option value="POST" style="color: var(--method-post)">POST</option>
-                                <option value="DELETE" style="color: var(--method-delete)">DELETE</option>
-                            </select>
-                            <input type="text" class="url-input" id="url-input" readonly>
-                            <button class="btn-send" id="btn-send">Send Request</button>
-                        </div>
-                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">
-                            Headers: <br>
-                            <span style="color: #a3a3a3;">Authorization:</span> <span style="color: #22c55e;">Bearer eyJhbGci...</span><br>
-                            <span style="color: #a3a3a3;">Content-Type:</span> <span style="color: #22c55e;">application/json</span>
-                        </div>
-                    </div>
+            <section class="request-console">
+                <div class="window-bar">
+                    <span></span><span></span><span></span>
+                    <strong id="serviceName">Endpoint</strong>
                 </div>
-
-                <!-- Response Panel -->
-                <div class="panel">
-                    <div class="response-header">
-                        <span>Response Body</span>
-                        <div class="response-meta">
-                            <span class="status-code" id="res-status">---</span>
-                            <span id="res-time">0ms</span>
-                        </div>
-                    </div>
-                    <div class="json-viewer">
-                        <button class="copy-btn" id="copy-btn">Copy JSON</button>
-                        <pre><code id="json-output">// Click "Send Request" to fetch data...</code></pre>
-                    </div>
+                <div class="request-line">
+                    <span id="methodBadge" class="method">GET</span>
+                    <input id="urlInput" readonly>
+                    <button id="sendRequest">Send</button>
                 </div>
-
+                <p id="servicePath" class="service-path"></p>
+                <div id="policyList" class="policy-list"></div>
+                <div class="slo-strip">
+                    <div><span>availability</span><strong id="availabilityValue">99.94%</strong></div>
+                    <div><span>p95</span><strong id="latencyValue">182ms</strong></div>
+                    <div><span>contract</span><strong id="contractScore">91</strong></div>
+                </div>
             </section>
-        </div>
 
-        <!-- Standards Grid -->
-        <div class="standards-grid">
-            <div class="standard-card">
-                <h4>[01] Autenticación</h4>
-                <p>Implementación de JWT con rotación de refresh tokens y validación de claims RBAC por API Gateway.</p>
-            </div>
-            <div class="standard-card">
-                <h4>[02] Rate Limiting</h4>
-                <p>Algoritmo Token Bucket en Redis. Límite estándar: 100 req/min. Superar límite retorna HTTP 429.</p>
-            </div>
-            <div class="standard-card">
-                <h4>[03] Telemetría</h4>
-                <p>Trazo distribuido con OpenTelemetry. Logs centralizados con ELK stack. Monitoreo en Datadog.</p>
-            </div>
-        </div>
+            <aside class="response-panel">
+                <div class="panel-head">
+                    <span>response inspector</span>
+                    <em id="responseMeta">idle</em>
+                </div>
+                <pre id="jsonOutput">{
+  "status": "ready",
+  "message": "Select an endpoint and send a request."
+}</pre>
+            </aside>
+        </section>
 
+        <section class="contract-lab">
+            <div>
+                <span class="prompt">contract guard</span>
+                <h2>Breaking changes visibles antes del deploy.</h2>
+                <p>El validador resume el riesgo real: schema, auth, rate limit y ejemplos. Nada de tablas eternas.</p>
+            </div>
+            <button id="runContract">Validar contrato</button>
+            <pre id="contractOutput">$ openapi-diff current.yaml proposed.yaml
+waiting...</pre>
+        </section>
     </main>
 
     <script src="script.js"></script>
